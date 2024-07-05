@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import status, ValidationError
 from .models import User, Ride, RideEvent
 
 
@@ -9,6 +10,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RideSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        instance = Ride(**data)
+        try:
+            instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.args[0])
+
     class Meta:
         model = Ride
         fields = [
