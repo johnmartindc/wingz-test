@@ -4,14 +4,7 @@ from .models import Ride, User, RideEvent
 from .serializers import RideSerializer, UserSerializer, RideEventSerializer
 
 
-class UserViewSet(
-    viewsets.GenericViewSet,
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -22,26 +15,21 @@ class RidePagination(PageNumberPagination):
     max_page_size = 20
 
 
-class RideViewSet(
-    viewsets.GenericViewSet,
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-):
-    queryset = Ride.objects.all()
+class RideViewSet(viewsets.ModelViewSet):
     serializer_class = RideSerializer
     pagination_class = RidePagination
 
+    def get_queryset(self):
+        queryset = Ride.objects.all()
+        status = self.request.query_params.get("status", None)
+        email = self.request.query_params.get("email", None)
+        if status:
+            queryset = queryset.filter(status=status)
+        if email:
+            queryset = queryset.filter(rider__email=email)
+        return queryset
 
-class RideEventViewSet(
-    viewsets.GenericViewSet,
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-):
+
+class RideEventViewSet(viewsets.ModelViewSet):
     queryset = RideEvent.objects.all()
     serializer_class = RideEventSerializer
