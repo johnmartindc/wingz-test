@@ -14,6 +14,7 @@ class RideSerializer(serializers.ModelSerializer):
         instance = Ride(**data)
         try:
             instance.clean()
+            return data
         except ValidationError as e:
             raise serializers.ValidationError(e.args[0])
 

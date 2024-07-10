@@ -23,10 +23,15 @@ class RideViewSet(viewsets.ModelViewSet):
         queryset = Ride.objects.all()
         status = self.request.query_params.get("status", None)
         email = self.request.query_params.get("email", None)
+        sort = self.request.query_params.get("sort", None)
+        order = "" if self.request.query_params.get("ascending") == "true" else "-"
         if status:
             queryset = queryset.filter(status=status)
         if email:
             queryset = queryset.filter(rider__email=email)
+        if sort:
+            sort = order + sort
+            queryset = queryset.order_by(sort)
         return queryset
 
 
