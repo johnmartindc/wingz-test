@@ -1,6 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.exceptions import ValidationError
+from django.contrib.gis.geos import Point
 from .constants import ROLE_CHOICES, RIDE_STATUS_CHOICES
 
 
@@ -36,6 +37,12 @@ class Ride(models.Model):
         if self.rider == self.driver:
             raise ValidationError("Driver and Rider cannot have the same value.")
         super().clean()
+
+    def distance_to_pickup(self, input_latitude, input_longitude):
+        input_point = Point(float(input_latitude), float(input_longitude))
+        pickup_point = Point(self.pickup_latitude, self.pickup_longitude)
+        distance = input_point.distance(pickup_point)  # in meters
+        return distance
 
 
 class RideEvent(models.Model):
