@@ -3,4 +3,3 @@ RIDE_STATUS_CHOICES = [
     ("en-route", "En-route"),
     ("dropoff", "Dropoff"),
 ]
-ROLE_CHOICES = [("admin", "Admin"), ("client", "Client"), ("user", "User")]

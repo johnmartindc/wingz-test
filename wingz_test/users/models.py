@@ -1,7 +1,6 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
-from rides.constants import ROLE_CHOICES
 from .managers import CustomUserManager
 
 
@@ -11,15 +10,9 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
     phone_number = PhoneNumberField()
-    role = models.CharField(
-        max_length=15,
-        choices=ROLE_CHOICES,
-        null=True,
-        blank=True,
-    )
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["phone_number"]
 
     objects = CustomUserManager()
 
