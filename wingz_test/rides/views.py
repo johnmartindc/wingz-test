@@ -2,13 +2,12 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from .models import Ride, User, RideEvent
-from .serializers import RideSerializer, UserSerializer, RideEventSerializer
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from .models import Ride, RideEvent
+from .serializers import RideSerializer, RideEventSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 
 class RidePagination(PageNumberPagination):
@@ -20,6 +19,7 @@ class RidePagination(PageNumberPagination):
 class RideViewSet(viewsets.ModelViewSet):
     serializer_class = RideSerializer
     pagination_class = RidePagination
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Ride.objects.all()
@@ -72,3 +72,4 @@ class RideViewSet(viewsets.ModelViewSet):
 class RideEventViewSet(viewsets.ModelViewSet):
     queryset = RideEvent.objects.all()
     serializer_class = RideEventSerializer
+    permission_classes = [IsAuthenticated]

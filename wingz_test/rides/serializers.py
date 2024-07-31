@@ -1,12 +1,6 @@
 from rest_framework import serializers
-from rest_framework.exceptions import status, ValidationError
-from .models import User, Ride, RideEvent
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "first_name", "last_name", "email", "phone_number", "role"]
+from rest_framework.exceptions import ValidationError
+from .models import Ride, RideEvent
 
 
 class RideSerializer(serializers.ModelSerializer):
