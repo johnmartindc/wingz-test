@@ -53,10 +53,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return instance
 
     def create(self, validated_data):
-        passowrd = validated_data.pop("password")
-        passowrd2 = validated_data.pop("password2")
+        password = validated_data.pop("password")
+        password2 = validated_data.pop("password2")
         user = User.objects.create(**validated_data)
-        user.set_password(passowrd)
+        user.set_password(password)
         user.save()
         Token.objects.create(user=user)
         return user
