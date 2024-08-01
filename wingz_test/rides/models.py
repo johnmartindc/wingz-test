@@ -6,7 +6,9 @@ from users.models import CustomUser
 
 
 class Ride(models.Model):
-    status = models.CharField(max_length=30, choices=RIDE_STATUS_CHOICES)
+    status = models.CharField(
+        max_length=30, choices=RIDE_STATUS_CHOICES, default="pickup"
+    )
     rider = models.ForeignKey(
         CustomUser, related_name="rider", on_delete=models.CASCADE
     )
@@ -32,6 +34,6 @@ class Ride(models.Model):
 
 
 class RideEvent(models.Model):
-    ride = models.ForeignKey(Ride, on_delete=models.CASCADE)
+    ride = models.ForeignKey(Ride, related_name="ride_events", on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
